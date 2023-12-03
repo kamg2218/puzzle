@@ -19,3 +19,7 @@ export const shuffle = (array) => {
   }
   return array;
 };
+
+export const ITEM_TYPES = {
+  draggable: "Draggable",
+};

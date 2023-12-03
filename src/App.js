@@ -1,12 +1,10 @@
 import "./App.css";
-import PuzzleBoard from "./components/PuzzleBoard";
-import PuzzleSelector from "./components/PuzzleSelector";
+import PuzzleContainer from "./components/PuzzleContainer";
 
 function App() {
   return (
     <div className="App">
-      <PuzzleBoard />
-      <PuzzleSelector />
+      <PuzzleContainer />
     </div>
   );
 }

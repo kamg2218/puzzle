@@ -6,23 +6,38 @@ import dog from "../assets/image/retriever-dog.jpg";
 import french from "../assets/image/french-bulldog.jpg";
 
 import { IMAGE_POSITIONS, shuffle } from "../utils/util";
+import DraggablePuzzle from "./DraggablePuzzle";
 
-const PuzzleSelector = () => {
-  const [imageOrder, setImageOrder] = useState(IMAGE_POSITIONS);
+const PuzzleSelector = ({ board, handleDraggablePuzzle }) => {
+  const [imageOrder, setImageOrder] = useState([]);
 
-  const shuffleImage = () => {
-    const result = shuffle(imageOrder.slice());
+  const shuffleImage = (array) => {
+    const result = shuffle(array.slice());
     setImageOrder(result);
   };
 
   useEffect(() => {
-    shuffleImage();
+    const array = Array.from(Array(9), (_, idx) => idx);
+    shuffleImage(array);
   }, []);
 
   return (
     <StyledContainer>
-      {imageOrder.map(({ x, y }, idx) => {
-        return <StyledList key={idx} x={x} y={y} img={french} show={true} />;
+      {imageOrder.map((value) => {
+        if (!!board[value]) return null;
+
+        const { x, y } = IMAGE_POSITIONS[value];
+        return (
+          <DraggablePuzzle
+            key={value}
+            idx={value}
+            x={x}
+            y={y}
+            img={french}
+            show={true}
+            handleDraggablePuzzle={handleDraggablePuzzle}
+          />
+        );
       })}
     </StyledContainer>
   );
@@ -39,23 +54,6 @@ const StyledContainer = styled.ul`
   overflow-x: scroll;
   gap: 0.1rem;
   background-color: lightgray;
-`;
-
-const StyledList = styled.li`
-  width: 100%;
-  min-height: 80px;
-  border: 1px solid black;
-
-  background: url(${(props) => props.img}) no-repeat;
-  background-size: ${({ show }) => (show ? "300% 300%" : "0")};
-
-  background-position-x: ${(props) => props.x};
-  background-position-y: ${(props) => props.y};
-
-  &:hover {
-    transform: scale(1.2);
-    border: none;
-  }
 `;
 
 export default PuzzleSelector;
