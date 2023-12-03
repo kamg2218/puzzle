@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 
-import dog from "../assets/image/retriever-dog.jpg";
-import french from "../assets/image/french-bulldog.jpg";
-
 import { IMAGE_POSITIONS, shuffle } from "../utils/util";
 import DraggablePuzzle from "./DraggablePuzzle";
 
-const PuzzleSelector = ({ board, handleDraggablePuzzle }) => {
+const PuzzleSelector = ({ img, board, handleDraggablePuzzle }) => {
   const [imageOrder, setImageOrder] = useState([]);
 
   const shuffleImage = (array) => {
@@ -19,41 +16,74 @@ const PuzzleSelector = ({ board, handleDraggablePuzzle }) => {
   useEffect(() => {
     const array = Array.from(Array(9), (_, idx) => idx);
     shuffleImage(array);
-  }, []);
+  }, [img]);
 
   return (
     <StyledContainer>
-      {imageOrder.map((value) => {
-        if (!!board[value]) return null;
+      <StyledTitle>{"퍼즐 조각"}</StyledTitle>
+      <StyledContent>
+        {"조각을 꾹 눌러서 위 퍼즐판에 넣고 뺄 수 있어요!"}
+      </StyledContent>
+      <StyledSelector>
+        {imageOrder.map((value) => {
+          if (!!board[value]) return null;
 
-        const { x, y } = IMAGE_POSITIONS[value];
-        return (
-          <DraggablePuzzle
-            key={value}
-            idx={value}
-            x={x}
-            y={y}
-            img={french}
-            show={true}
-            handleDraggablePuzzle={handleDraggablePuzzle}
-          />
-        );
-      })}
+          const { x, y } = IMAGE_POSITIONS[value];
+          return (
+            <DraggablePuzzle
+              key={value}
+              idx={value}
+              x={x}
+              y={y}
+              img={img}
+              show={true}
+              handleDraggablePuzzle={handleDraggablePuzzle}
+            />
+          );
+        })}
+      </StyledSelector>
     </StyledContainer>
   );
 };
 
-const StyledContainer = styled.ul`
+const StyledContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  flex-flow: no-wrap;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  margin: 1rem 5rem;
-  padding: 0.5rem;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+const StyledTitle = styled.h1`
+  width: 100%;
+  font-weight: 600;
+  text-align: start;
+`;
+
+const StyledContent = styled.span`
+  width: 100%;
+  font-size: 0.8rem;
+  text-align: start;
+`;
+
+const StyledSelector = styled.ul`
+  width: 100%;
+  height: 100%;
+  min-height: 128px;
+  display: flex;
+  flex-flow: no-wrap;
+  justify-content: start;
+  align-items: center;
+  padding: 0;
+  margin-top: 0.1rem;
   overflow-x: scroll;
-  gap: 0.1rem;
-  background-color: lightgray;
+  overflow-y: hidden;
+  gap: 0.4rem;
+  background-color: #e2e2e2;
+  border-radius: 8px;
 `;
 
 export default PuzzleSelector;

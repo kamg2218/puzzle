@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useDrag } from "react-dnd";
 
 import styled from "styled-components";
@@ -6,15 +6,25 @@ import styled from "styled-components";
 import { ITEM_TYPES } from "../utils/util";
 
 const DraggablePuzzle = ({ idx, x, y, img, show, handleDraggablePuzzle }) => {
-  const [{ opacity, isDragging }, dragRef] = useDrag(
+  const draggableRef = useRef(false);
+
+  const [{ opacity, transform, isDragging }, dragRef] = useDrag(
     () => ({
       type: ITEM_TYPES.draggable,
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.1 : 1,
+        transform: draggableRef.current ? "scale(1.2)" : "scale(1)",
         isDragging: !!monitor.isDragging(),
       }),
+      item: () => {
+        setTimeout(() => {
+          draggableRef.current = true;
+        }, 500);
+      },
       end: () => {
+        console.log("end");
         handleDraggablePuzzle(idx);
+        draggableRef.current = false;
       },
     }),
     []
@@ -22,31 +32,29 @@ const DraggablePuzzle = ({ idx, x, y, img, show, handleDraggablePuzzle }) => {
 
   return (
     <StyledList
-      x={x}
-      y={y}
-      img={img}
-      show={isDragging ? false : show}
-      style={{ opacity }}
+      $x={x}
+      $y={y}
+      $img={img}
+      $show={isDragging ? false : show}
+      style={{ opacity, transform }}
       ref={dragRef}
     />
   );
 };
 
 const StyledList = styled.li`
-  width: 32%;
+  min-width: 30%;
   min-height: 80px;
-  border: 1px solid black;
 
-  background: url(${(props) => props.img}) no-repeat;
-  background-size: ${({ show }) => (show ? "300% 300%" : "0")};
+  background: url(${({ $img }) => $img}) no-repeat;
+  background-size: ${({ $show }) => ($show ? "300% 300%" : "0")};
 
-  background-position-x: ${(props) => props.x};
-  background-position-y: ${(props) => props.y};
+  background-position-x: ${({ $x }) => $x};
+  background-position-y: ${({ $y }) => $y};
 
-  &:hover {
-    transform: scale(1.2);
-    border: none;
-  }
+  // &:hover {
+  //   transform: scale(1.2);
+  // }
 `;
 
 export default DraggablePuzzle;

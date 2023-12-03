@@ -21,8 +21,8 @@ const DroppablePuzzle = ({ idx, x, y, img, show, movePuzzle }) => {
 
   return (
     <StyledContainer ref={drop}>
-      <StyledList x={x} y={y} img={img} show={show} />
-      {isOver && <StyledOver x={x} y={y} />}
+      <StyledList $x={x} $y={y} $img={img} $show={show} $idx={idx} />
+      {isOver && <StyledOver $x={x} $y={y} />}
     </StyledContainer>
   );
 };
@@ -31,18 +31,43 @@ const StyledContainer = styled.div`
   width: 32%;
   min-height: 80px;
   position: relative;
+  background-color: #e2e2e2;
+
+  &:first-child {
+    border-radius: 8px 0 0;
+  }
+  &:nth-child(3) {
+    border-radius: 0 8px 0 0;
+  }
+  &:nth-child(7) {
+    border-radius: 0 0 0 8px;
+  }
+  &:last-child {
+    border-radius: 0 0 8px;
+  }
 `;
 
 const StyledList = styled.li`
   width: 100%;
   height: 100%;
-  border: 1px solid black;
+  border: 1px solid white;
 
-  background: url(${(props) => props.img}) no-repeat;
-  background-size: ${({ show }) => (show ? "300% 300%" : "0")};
+  background: url(${({ $img }) => $img}) no-repeat;
+  background-size: ${({ $show }) => ($show ? "300% 300%" : "0")};
 
-  background-position-x: ${(props) => props.x};
-  background-position-y: ${(props) => props.y};
+  background-position-x: ${({ $x }) => $x};
+  background-position-y: ${({ $y }) => $y};
+
+  border-radius: ${({ $idx }) =>
+    $idx === 0
+      ? "8px 0 0"
+      : $idx === 2
+      ? "0 8px 0 0"
+      : $idx === 6
+      ? "0 0 0 8px"
+      : $idx === 8
+      ? "0 0 8px"
+      : "0"};
 `;
 
 const StyledOver = styled.div`
@@ -55,8 +80,8 @@ const StyledOver = styled.div`
   opacity: 0.5;
   background-color: lightgray;
 
-  background-position-x: ${(props) => props.x};
-  background-position-y: ${(props) => props.y};
+  background-position-x: ${({ $x }) => $x};
+  background-position-y: ${({ $y }) => $y};
 `;
 
 export default DroppablePuzzle;
