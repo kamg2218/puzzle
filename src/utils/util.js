@@ -1,5 +1,7 @@
 import frenchBulldog from "../assets/image/french-bulldog.jpg";
 import retrieverDog from "../assets/image/retriever-dog.jpg";
+import shibaDog from "../assets/image/full-shot-shiba-dog.jpg";
+import frontViewShibaDog from "../assets/image/front-view-shiba-dog.jpg";
 
 export const IMAGE_POSITIONS = [
   { x: "1%", y: "1%" },
@@ -13,7 +15,12 @@ export const IMAGE_POSITIONS = [
   { x: "99%", y: "99%" },
 ];
 
-export const IMAGE_LIST = [frenchBulldog, retrieverDog];
+export const IMAGE_LIST = [
+  frenchBulldog,
+  retrieverDog,
+  shibaDog,
+  frontViewShibaDog,
+];
 
 export const shuffle = (array) => {
   let idx = array.length - 1;

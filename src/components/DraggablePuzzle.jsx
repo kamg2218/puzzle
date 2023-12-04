@@ -64,6 +64,11 @@ const DraggablePuzzle = ({ idx, x, y, img, show, handleDraggablePuzzle }) => {
         makeTimeOut();
         draggableRef.current = START;
       }}
+      onMouseMove={() => {
+        if (draggableRef.current === START) {
+          draggableRef.current = END;
+        }
+      }}
       onMouseUp={() => {
         draggableRef.current = END;
         setDraggable(false);
