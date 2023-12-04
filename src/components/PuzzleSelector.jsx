@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 
-import { IMAGE_POSITIONS, shuffle } from "../utils/util";
+import { shuffle } from "../utils/util";
+import { IMAGE_POSITIONS } from "../utils/images";
+
 import DraggablePuzzle from "./DraggablePuzzle";
 
 const PuzzleSelector = ({ img, board, handleDraggablePuzzle }) => {

@@ -7,7 +7,8 @@ import Button from "./Button";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { IMAGE_LIST, getRandomNumber } from "../utils/util";
+import { getRandomNumber } from "../utils/util";
+import { IMAGE_LIST } from "../utils/images";
 
 import styled from "styled-components";
 
