@@ -4,7 +4,7 @@ import DroppablePuzzle from "./DroppablePuzzle";
 
 import styled from "styled-components";
 
-import { IMAGE_POSITIONS } from "../utils/util";
+import { IMAGE_POSITIONS } from "../utils/images";
 
 const PuzzleBoard = ({ img, board, movePuzzle }) => {
   return (
