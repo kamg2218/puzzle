@@ -1,34 +1,55 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 
 import styled from "styled-components";
 
 import { ITEM_TYPES } from "../utils/util";
 
-const DraggablePuzzle = ({ idx, x, y, img, show, handleDraggablePuzzle }) => {
-  const draggableRef = useRef(false);
+const START = "start";
+const END = "end";
+const DRAGGABLE = "draggable";
 
-  const [{ opacity, transform, isDragging }, dragRef] = useDrag(
+const DraggablePuzzle = ({ idx, x, y, img, show, handleDraggablePuzzle }) => {
+  const timeRef = useRef(null);
+  const draggableRef = useRef(END);
+
+  const [draggable, setDraggable] = useState(false);
+
+  const [{ opacity, isDragging }, dragRef] = useDrag(
     () => ({
       type: ITEM_TYPES.draggable,
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.1 : 1,
-        transform: draggableRef.current ? "scale(1.2)" : "scale(1)",
         isDragging: !!monitor.isDragging(),
       }),
-      item: () => {
-        setTimeout(() => {
-          draggableRef.current = true;
-        }, 500);
-      },
+      canDrag: () => draggableRef.current === DRAGGABLE,
       end: () => {
-        console.log("end");
         handleDraggablePuzzle(idx);
-        draggableRef.current = false;
+        draggableRef.current = END;
+        setDraggable(false);
       },
     }),
     []
   );
+
+  const makeTimeOut = () => {
+    if (timeRef.current) {
+      clearTimeout(timeRef.current);
+    }
+    timeRef.current = setTimeout(() => {
+      if (draggableRef.current === END) return;
+      draggableRef.current = DRAGGABLE;
+      setDraggable(true);
+    }, 500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeRef.current) {
+        clearTimeout(timeRef.current);
+      }
+    };
+  }, []);
 
   return (
     <StyledList
@@ -36,8 +57,17 @@ const DraggablePuzzle = ({ idx, x, y, img, show, handleDraggablePuzzle }) => {
       $y={y}
       $img={img}
       $show={isDragging ? false : show}
-      style={{ opacity, transform }}
+      $draggable={draggable}
+      style={{ opacity }}
       ref={dragRef}
+      onMouseDown={() => {
+        makeTimeOut();
+        draggableRef.current = START;
+      }}
+      onMouseUp={() => {
+        draggableRef.current = END;
+        setDraggable(false);
+      }}
     />
   );
 };
@@ -52,9 +82,9 @@ const StyledList = styled.li`
   background-position-x: ${({ $x }) => $x};
   background-position-y: ${({ $y }) => $y};
 
-  // &:hover {
-  //   transform: scale(1.2);
-  // }
+  &:hover {
+    transform: ${({ $draggable }) => ($draggable ? "scale(1.2)" : "scale(1)")};
+  }
 `;
 
 export default DraggablePuzzle;
